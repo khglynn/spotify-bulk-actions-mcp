@@ -19,6 +19,18 @@ If this MCP is useful to you, consider buying me a coffee!
 
 ---
 
+## Projects Built With This
+
+| Project | Description | Links |
+|---------|-------------|-------|
+| **recordOS** | Which albums do you love most? A visual album collection app | [Live](https://record-os.khglynn.com) · [Repo](https://github.com/khglynn/recordOS) |
+| **Festival Navigator** | Navigate multi-day festivals with friends | [Repo](https://github.com/khglynn/festival-navigator) |
+
+### Playlists Maintained With This MCP
+*Coming soon: Switched On Pop, This American Life, and more podcast playlists*
+
+---
+
 ## What This Does
 
 **Library Analysis:**
