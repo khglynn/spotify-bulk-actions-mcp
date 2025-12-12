@@ -24,6 +24,7 @@ env/
 # Output files
 *.json
 !package.json
+!glama.json
 exports/
 reviews/
 
