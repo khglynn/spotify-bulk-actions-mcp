@@ -6,12 +6,6 @@
 
 Python MCP server for bulk Spotify operations - batch playlist creation, library exports, confidence-scored song matching.
 
-## Playwright for This Project
-
-Use `playwright-spotify-mcp` MCP for this project (not generic playwright).
-
-This keeps browser sessions/logins isolated from other projects. Profile stored at `~/.playwright-spotify-mcp/`.
-
 ## Key Features
 
 | Feature | Description |
