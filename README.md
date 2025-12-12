@@ -25,8 +25,8 @@ Made cause I can't not have headphones on, support my 80k+ pocast subscriptions.
 
 | Directory | Link |
 |-----------|------|
+| PyPI | [pypi.org/project/spotify-bulk-actions-mcp](https://pypi.org/project/spotify-bulk-actions-mcp/) |
 | mcp.so | [mcp.so/server/spotify-bulk-actions-mcp](https://mcp.so/server/spotify-bulk-actions-mcp/khglynn) |
-| Glama | [glama.ai/mcp/servers/@khglynn/spotify-bulk-actions-mcp](https://glama.ai/mcp/servers/@khglynn/spotify-bulk-actions-mcp) |
 | awesome-mcp-servers | [PR #1541](https://github.com/punkpeye/awesome-mcp-servers/pull/1541) *(pending)* |
 
 ---
@@ -73,17 +73,15 @@ Made cause I can't not have headphones on, support my 80k+ pocast subscriptions.
 git clone https://github.com/khglynn/spotify-bulk-actions-mcp.git
 cd spotify-bulk-actions-mcp
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
+# Install (creates CLI command)
+pip install -e .
 
 # Copy env example and add your credentials
 cp .env.example .env
 # Edit .env with your SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
 ```
+
+> **Also on PyPI:** `pip install spotify-bulk-actions-mcp` - but you'll still need local `.env` and auth setup.
 
 ### 3. Authenticate with Spotify (One-Time)
 

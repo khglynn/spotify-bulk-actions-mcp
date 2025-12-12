@@ -5,24 +5,21 @@ Spotify MCP Server
 A Model Context Protocol server for Spotify library analysis
 and playlist management.
 
-Run with: python src/server.py
+Run with: spotify-bulk-actions-mcp
 """
 
 import sys
 from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
 from dotenv import load_dotenv
 
-# Load environment variables before anything else
-load_dotenv(Path(__file__).parent.parent / ".env")
+# Load environment variables
+load_dotenv()
 
 from fastmcp import FastMCP
 
-from src.utils.auth import is_authenticated, get_spotify_client
-from src.tools import library, search, playlist
+from spotify_bulk_actions_mcp.utils.auth import is_authenticated, get_spotify_client
+from spotify_bulk_actions_mcp.tools import library, search, playlist
 
 # Create the MCP server
 mcp = FastMCP(
@@ -711,6 +708,12 @@ def export_review_csv(batch_results: dict) -> dict:
 # Main Entry Point
 # =============================================================================
 
-if __name__ == "__main__":
+
+def main():
+    """Entry point for the MCP server."""
     print("Starting Spotify MCP Server...", file=sys.stderr)
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

@@ -62,7 +62,7 @@ except KeyboardInterrupt:
     print("\nCancelled.")
     sys.exit(0)
 
-from src.utils.auth import get_spotify_client, is_authenticated, SCOPES
+from spotify_bulk_actions_mcp.utils.auth import get_spotify_client, is_authenticated, SCOPES
 
 print("")
 print("Opening browser for Spotify login...")
@@ -94,7 +94,7 @@ try:
     print("You can now use the Spotify MCP Server!")
     print("")
     print("To test, run:")
-    print("  python src/server.py")
+    print("  spotify-bulk-actions-mcp")
     print("")
 
 except Exception as e:

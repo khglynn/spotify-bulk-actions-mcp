@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spotify-bulk-actions-mcp"
+version = "0.1.0"
+description = "MCP server for bulk Spotify operations with confidence-scored song matching, batch playlist creation, and library exports"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Kevin Glynn", email = "kevin@khglynn.com" }
+]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "spotify",
+    "playlist",
+    "music",
+    "bulk-operations",
+    "claude"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp>=0.1.0",
+    "spotipy>=2.23.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.25.0",
+    "thefuzz>=0.22.0",
+    "python-Levenshtein>=0.23.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/khglynn/spotify-bulk-actions-mcp"
+Repository = "https://github.com/khglynn/spotify-bulk-actions-mcp"
+Issues = "https://github.com/khglynn/spotify-bulk-actions-mcp/issues"
+
+[project.scripts]
+spotify-bulk-actions-mcp = "spotify_bulk_actions_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["spotify_bulk_actions_mcp"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/spotify_bulk_actions_mcp",
+    "/README.md",
+    "/LICENSE",
+]
