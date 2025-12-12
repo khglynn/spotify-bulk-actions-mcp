@@ -1,6 +1,6 @@
 # Spotify Bulk Actions MCP
 
-A Model Context Protocol (MCP) server for bulk Spotify operations - batch playlist creation, library exports, and large-scale library management.
+A Model Context Protocol (MCP) server for bulk Spotify operations - **batch playlist creation, library exports, and large-scale library management.**
 
 **What makes this different from other Spotify MCPs?**
 - **Confidence scoring** - Batch searches return HIGH/MEDIUM/LOW confidence for each match
@@ -13,13 +13,11 @@ A Model Context Protocol (MCP) server for bulk Spotify operations - batch playli
 
 ## Support This Project
 
-If this MCP is useful to you, consider buying me a coffee!
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/kevinhg)
+Made cause I can't not have headphones on, support my 80k+ pocast subscriptions. [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/kevinhg)
 
 ---
 
-## Projects Built With This
+## Projects I've Built With This
 
 | Project | Description | Links |
 |---------|-------------|-------|
