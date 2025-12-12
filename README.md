@@ -21,6 +21,16 @@ Made cause I can't not have headphones on, support my 80k+ pocast subscriptions.
 
 ---
 
+## Listed On
+
+| Directory | Link |
+|-----------|------|
+| mcp.so | [mcp.so/server/spotify-bulk-actions-mcp](https://mcp.so/server/spotify-bulk-actions-mcp/khglynn) |
+| Glama | [glama.ai/mcp/servers/@khglynn/spotify-bulk-actions-mcp](https://glama.ai/mcp/servers/@khglynn/spotify-bulk-actions-mcp) |
+| awesome-mcp-servers | [PR #1541](https://github.com/punkpeye/awesome-mcp-servers/pull/1541) *(pending)* |
+
+---
+
 ## Projects I've Built With This
 
 | Project | Description | Links |
