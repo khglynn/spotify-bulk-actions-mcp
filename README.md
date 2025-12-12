@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="Spotify Bulk Actions MCP" width="200">
+</p>
+
 # Spotify Bulk Actions MCP
 
 A Model Context Protocol (MCP) server for bulk Spotify operations - **batch playlist creation, library exports, and large-scale library management.**
