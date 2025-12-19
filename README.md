@@ -4,6 +4,8 @@
 
 # Spotify Bulk Actions MCP
 
+<!-- mcp-name: io.github.khglynn/spotify-bulk-actions-mcp -->
+
 A Model Context Protocol (MCP) server for bulk Spotify operations - **batch playlist creation, library exports, and large-scale library management.**
 
 **What makes this different from other Spotify MCPs?**
@@ -73,7 +75,11 @@ Made cause I can't not have headphones on, support my 80k+ pocast subscriptions.
 git clone https://github.com/khglynn/spotify-bulk-actions-mcp.git
 cd spotify-bulk-actions-mcp
 
-# Install (creates CLI command)
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install the package
 pip install -e .
 
 # Copy env example and add your credentials

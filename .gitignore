@@ -32,3 +32,4 @@ reviews/
 .DS_Store
 Thumbs.db
 dist/
+.mcpregistry_*
