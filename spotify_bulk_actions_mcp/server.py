@@ -519,6 +519,35 @@ def get_playlist_info(playlist_id: str) -> dict:
 
 
 @mcp.tool()
+def update_playlist(
+    playlist_id: str,
+    name: str = None,
+    description: str = None,
+    public: bool = None,
+) -> dict:
+    """
+    Update playlist details (name, description, public status).
+
+    Only provide the fields you want to change.
+
+    Args:
+        playlist_id: Playlist ID
+        name: New playlist name (optional)
+        description: New playlist description (optional)
+        public: New public status (optional)
+
+    Returns:
+        Updated playlist info.
+    """
+    return playlist.update_playlist(
+        playlist_id=playlist_id,
+        name=name,
+        description=description,
+        public=public,
+    )
+
+
+@mcp.tool()
 def get_playlist_tracks(playlist_id: str) -> dict:
     """
     Get all tracks from a playlist.

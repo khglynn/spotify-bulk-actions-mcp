@@ -383,6 +383,30 @@ class SpotifyClient:
             range_length=range_length,
         )
 
+    def update_playlist_details(
+        self,
+        playlist_id: str,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        public: Optional[bool] = None,
+    ) -> None:
+        """
+        Update playlist details (name, description, public status).
+
+        Args:
+            playlist_id: Playlist ID
+            name: New playlist name (optional)
+            description: New playlist description (optional)
+            public: New public status (optional)
+        """
+        self._handle_rate_limit(
+            self.client.playlist_change_details,
+            playlist_id=playlist_id,
+            name=name,
+            description=description,
+            public=public,
+        )
+
     # =========================================================================
     # Follow/Unfollow Artists
     # =========================================================================

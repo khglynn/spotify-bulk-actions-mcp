@@ -294,6 +294,42 @@ def get_playlist_info(playlist_id: str) -> Dict[str, Any]:
         }
 
 
+def update_playlist(
+    playlist_id: str,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    public: Optional[bool] = None,
+) -> Dict[str, Any]:
+    """
+    Update playlist details (name, description, public status).
+
+    Args:
+        playlist_id: Playlist ID
+        name: New playlist name (optional)
+        description: New playlist description (optional)
+        public: New public status (optional)
+
+    Returns:
+        Updated playlist info
+    """
+    try:
+        # Update the playlist
+        spotify_client.update_playlist_details(
+            playlist_id=playlist_id,
+            name=name,
+            description=description,
+            public=public,
+        )
+
+        # Return updated info
+        return get_playlist_info(playlist_id)
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+        }
+
+
 # =============================================================================
 # Playlist Analysis Tools
 # =============================================================================
