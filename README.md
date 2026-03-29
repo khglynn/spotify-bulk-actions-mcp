@@ -60,6 +60,10 @@ Made cause I can't not have headphones on, support my 80k+ pocast subscriptions.
 - Automatic handling of uncertain matches for human review
 - Create playlists from search results
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/khglynn-spotify-bulk-actions-mcp).
+
 ## Quick Start
 
 ### 1. Prerequisites
