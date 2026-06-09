@@ -33,3 +33,6 @@ reviews/
 Thumbs.db
 dist/
 .mcpregistry_*
+
+# Claude Code project memory — keep out of this public repo
+.claude-memory/
