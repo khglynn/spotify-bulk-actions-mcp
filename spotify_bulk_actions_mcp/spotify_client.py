@@ -271,10 +271,10 @@ class SpotifyClient:
         Returns:
             Created playlist object
         """
-        user = self.get_current_user()
+        # POST /me/playlists — the old per-user endpoint (POST /users/{id}/playlists)
+        # was removed in Spotify's February 2026 Web API migration
         return self._handle_rate_limit(
-            self.client.user_playlist_create,
-            user=user["id"],
+            self.client.current_user_playlist_create,
             name=name,
             public=public,
             description=description,
@@ -313,10 +313,11 @@ class SpotifyClient:
 
         while True:
             result = self._handle_rate_limit(
-                self.client.playlist_tracks,
+                self.client.playlist_items,
                 playlist_id=playlist_id,
                 offset=offset,
                 limit=100,
+                additional_types=("track",),
             )
 
             items = result["items"]
