@@ -75,11 +75,33 @@ class AllowlistMiddleware(Middleware):
 
 _auth = _build_auth()
 
+
+def _load_icon():
+    """Declare the server icon (MCP `icons` field, spec 2025-11+).
+
+    claude.ai does not render custom-connector icons as of 2026-08 (see
+    self-hosted-mcps LESSONS.md) — declared anyway so it works the day
+    clients honor it. Embedded as a data URI: same-origin/data is what the
+    spec allows, and it survives URL changes.
+    """
+    import base64
+
+    from mcp.types import Icon
+
+    icon_path = Path(__file__).parent / "icon.png"
+    if not icon_path.exists():
+        return None
+    b64 = base64.b64encode(icon_path.read_bytes()).decode()
+    return [Icon(src=f"data:image/png;base64,{b64}", mimeType="image/png", sizes=["128x128"])]
+
+
 # Create the MCP server
 mcp = FastMCP(
     "Spotify Library Manager",
     instructions="Analyze your Spotify library and create playlists from song lists",
     auth=_auth,
+    icons=_load_icon(),
+    website_url="https://github.com/khglynn/spotify-bulk-actions-mcp",
 )
 
 if _auth is not None:
