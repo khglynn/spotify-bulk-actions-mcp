@@ -54,11 +54,25 @@ Made cause I can't not have headphones on, support my 80k+ pocast subscriptions.
 - Find albums where you have 6+ saved songs (great for vinyl shopping!)
 - Export your complete library summary
 
+**Listening Insights:**
+- Your top artists and tracks (short/medium/long term)
+- Recently played history
+
 **Bulk Playlist Creation:**
 - Import song lists from CSV files (for podcast playlists, etc.)
 - Batch search with confidence scoring (HIGH/MEDIUM/LOW)
 - Automatic handling of uncertain matches for human review
 - Create playlists from search results
+
+**Playlist Maintenance:**
+- Find and remove duplicate tracks
+- Compare two playlists (shared vs unique tracks)
+- Bulk remove and reorder tracks, update playlist details
+- Export any playlist to CSV
+
+**Bulk Library Actions:**
+- Follow/unfollow artists in bulk
+- Save/unsave tracks in bulk
 
 ## Quick Start
 
@@ -103,7 +117,7 @@ After login, your token is saved locally in `.spotify_cache/`.
 
 ```bash
 source venv/bin/activate
-python -c "from src.utils.auth import is_authenticated; print('Auth OK!' if is_authenticated() else 'Not authenticated')"
+python -c "from spotify_bulk_actions_mcp.utils.auth import is_authenticated; print('Auth OK!' if is_authenticated() else 'Not authenticated')"
 ```
 
 ### 5. Connect to Claude Code
@@ -114,8 +128,7 @@ Add this to your Claude Code settings (`~/.claude/settings.local.json`):
 {
   "mcpServers": {
     "spotify": {
-      "command": "/path/to/spotify-bulk-actions-mcp/venv/bin/python",
-      "args": ["/path/to/spotify-bulk-actions-mcp/src/server.py"]
+      "command": "/path/to/spotify-bulk-actions-mcp/venv/bin/spotify-bulk-actions-mcp"
     }
   }
 }
@@ -123,7 +136,7 @@ Add this to your Claude Code settings (`~/.claude/settings.local.json`):
 
 Restart Claude Code after adding this.
 
-## Available Tools (18)
+## Available Tools (33)
 
 ### Library Analysis
 | Tool | Description |
@@ -135,6 +148,21 @@ Restart Claude Code after adding this.
 | `get_albums_by_song_count` | Albums with N+ saved songs |
 | `export_library_summary` | Complete library export |
 
+### Listening Insights
+| Tool | Description |
+|------|-------------|
+| `get_top_artists` | Your top artists (short/medium/long term) |
+| `get_top_tracks` | Your top tracks (short/medium/long term) |
+| `get_recently_played` | Recently played tracks |
+
+### Bulk Library Actions
+| Tool | Description |
+|------|-------------|
+| `follow_artists` | Follow artists in bulk |
+| `unfollow_artists` | Unfollow artists in bulk |
+| `save_tracks` | Like/save tracks in bulk |
+| `unsave_tracks` | Un-like tracks in bulk |
+
 ### Search
 | Tool | Description |
 |------|-------------|
@@ -143,7 +171,7 @@ Restart Claude Code after adding this.
 | `batch_search_tracks` | Search many tracks with confidence scores |
 | `get_track_preview_url` | Get 30-second preview URL |
 
-### Playlists
+### Playlist Creation
 | Tool | Description |
 |------|-------------|
 | `create_playlist` | Create a new playlist |
@@ -151,7 +179,19 @@ Restart Claude Code after adding this.
 | `import_and_create_playlist` | Full CSV → playlist workflow |
 | `create_playlist_from_search_results` | Create from batch search |
 | `add_reviewed_tracks` | Add reviewed/corrected tracks |
+
+### Playlist Management
+| Tool | Description |
+|------|-------------|
 | `get_playlist_info` | Get playlist details |
+| `update_playlist` | Update name, description, public status |
+| `get_playlist_tracks` | Get all tracks in a playlist |
+| `export_playlist_to_csv` | Export a playlist to CSV |
+| `compare_playlists` | Shared vs unique tracks between two playlists |
+| `find_duplicate_tracks` | Find duplicates in a playlist |
+| `remove_duplicate_tracks` | Remove duplicates, keeping first occurrence |
+| `remove_tracks_from_playlist` | Bulk remove specific tracks |
+| `reorder_playlist_tracks` | Move tracks within a playlist |
 
 ### Utilities
 | Tool | Description |
@@ -218,8 +258,8 @@ For 10k songs, expect the initial library fetch to take 2-3 minutes.
 |----------|---------|
 | `.env` | Your Spotify credentials (gitignored) |
 | `.spotify_cache/` | Auth tokens and cached data (gitignored) |
-| `src/server.py` | Main MCP server |
-| `src/tools/` | Tool implementations |
+| `spotify_bulk_actions_mcp/server.py` | Main MCP server |
+| `spotify_bulk_actions_mcp/tools/` | Tool implementations |
 
 ## Troubleshooting
 
