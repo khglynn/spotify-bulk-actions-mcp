@@ -8,6 +8,7 @@ and playlist management.
 Run with: spotify-bulk-actions-mcp
 """
 
+import os
 import sys
 from pathlib import Path
 
@@ -17,15 +18,78 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from fastmcp import FastMCP
+from fastmcp.exceptions import ToolError
+from fastmcp.server.dependencies import get_access_token
+from fastmcp.server.middleware import Middleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from spotify_bulk_actions_mcp.utils.auth import is_authenticated, get_spotify_client
 from spotify_bulk_actions_mcp.tools import library, search, playlist
+
+
+def _build_auth():
+    """MCP-layer auth for hosted deployments: WorkOS AuthKit (OAuth 2.1 + DCR).
+
+    Fail-closed: on Cloud Run (K_SERVICE is set by the platform) the server
+    refuses to start without auth configured. Locally over stdio there is no
+    auth — the process boundary is the auth.
+    """
+    authkit_domain = os.getenv("AUTHKIT_DOMAIN")
+    if not authkit_domain:
+        if os.getenv("K_SERVICE"):
+            raise RuntimeError(
+                "Refusing to start on Cloud Run without AUTHKIT_DOMAIN set — "
+                "this server must never run remotely unauthenticated."
+            )
+        return None
+    from fastmcp.server.auth.providers.workos import AuthKitProvider
+
+    return AuthKitProvider(
+        authkit_domain=authkit_domain,
+        base_url=os.environ["MCP_BASE_URL"],
+    )
+
+
+class AllowlistMiddleware(Middleware):
+    """Only WorkOS user IDs in ALLOWED_WORKOS_USER_IDS may use the server.
+
+    An empty or unset allowlist rejects everyone (fail closed) and logs the
+    attempted subject, so the first legitimate user can be captured from logs
+    and allowlisted without ever running open.
+    """
+
+    async def on_request(self, context, call_next):
+        allowed = {
+            s.strip()
+            for s in os.getenv("ALLOWED_WORKOS_USER_IDS", "").split(",")
+            if s.strip()
+        }
+        token = get_access_token()
+        sub = token.claims.get("sub") if token else None
+        if sub not in allowed:
+            print(f"allowlist: rejected sub={sub!r}", file=sys.stderr)
+            raise ToolError("This server is private; your user is not allowlisted.")
+        return await call_next(context)
+
+
+_auth = _build_auth()
 
 # Create the MCP server
 mcp = FastMCP(
     "Spotify Library Manager",
     instructions="Analyze your Spotify library and create playlists from song lists",
+    auth=_auth,
 )
+
+if _auth is not None:
+    mcp.add_middleware(AllowlistMiddleware())
+
+
+@mcp.custom_route("/health", methods=["GET"])
+async def health(request: Request) -> JSONResponse:
+    """Unauthenticated liveness probe for Cloud Run and the fleet watchdog."""
+    return JSONResponse({"status": "ok", "server": "spotify-bulk-actions-mcp"})
 
 
 # =============================================================================
@@ -739,9 +803,20 @@ def export_review_csv(batch_results: dict) -> dict:
 
 
 def main():
-    """Entry point for the MCP server."""
-    print("Starting Spotify MCP Server...", file=sys.stderr)
-    mcp.run()
+    """Entry point for the MCP server.
+
+    MCP_TRANSPORT=stdio (default) keeps the local Claude Code registration
+    working unchanged; MCP_TRANSPORT=http serves streamable HTTP for hosted
+    deployments, binding 0.0.0.0 on $PORT (Cloud Run injects PORT).
+    """
+    transport = os.getenv("MCP_TRANSPORT", "stdio")
+    if transport == "stdio":
+        print("Starting Spotify MCP Server (stdio)...", file=sys.stderr)
+        mcp.run()
+    else:
+        port = int(os.getenv("PORT", "8080"))
+        print(f"Starting Spotify MCP Server ({transport} on 0.0.0.0:{port})...", file=sys.stderr)
+        mcp.run(transport=transport, host="0.0.0.0", port=port)
 
 
 if __name__ == "__main__":

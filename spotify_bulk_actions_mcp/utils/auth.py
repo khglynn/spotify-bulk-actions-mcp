@@ -3,12 +3,14 @@ OAuth authentication utilities for Spotify API.
 Uses spotipy's built-in OAuth flow with local caching.
 """
 
+import json
 import os
 import sys
 from pathlib import Path
 from typing import Optional
 
 import spotipy
+from spotipy.cache_handler import CacheFileHandler, MemoryCacheHandler
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 
@@ -37,6 +39,22 @@ def get_cache_path() -> Path:
     return cache_dir / "token.cache"
 
 
+# Hosted deployments have no persistent disk: the refreshed token must live in
+# process memory, seeded once per boot from SPOTIFY_TOKEN_INFO (the full spotipy
+# token_info JSON, incl. refresh_token — Spotify refresh tokens don't rotate).
+_env_cache_handler: Optional[MemoryCacheHandler] = None
+
+
+def _get_cache_handler():
+    global _env_cache_handler
+    token_json = os.getenv("SPOTIFY_TOKEN_INFO")
+    if token_json:
+        if _env_cache_handler is None:
+            _env_cache_handler = MemoryCacheHandler(token_info=json.loads(token_json))
+        return _env_cache_handler
+    return CacheFileHandler(cache_path=str(get_cache_path()))
+
+
 def get_spotify_client(interactive: bool = False) -> Optional[spotipy.Spotify]:
     """
     Get an authenticated Spotify client.
@@ -58,14 +76,12 @@ def get_spotify_client(interactive: bool = False) -> Optional[spotipy.Spotify]:
             print("Copy .env.example to .env and fill in your credentials", file=sys.stderr)
         return None
 
-    cache_path = get_cache_path()
-
     auth_manager = SpotifyOAuth(
         client_id=client_id,
         client_secret=client_secret,
         redirect_uri=redirect_uri,
         scope=" ".join(SCOPES),
-        cache_path=str(cache_path),
+        cache_handler=_get_cache_handler(),
         open_browser=interactive,
     )
 
@@ -91,8 +107,7 @@ def is_authenticated() -> bool:
     if not client_id or not client_secret:
         return False
 
-    cache_path = get_cache_path()
-    if not cache_path.exists():
+    if not os.getenv("SPOTIFY_TOKEN_INFO") and not get_cache_path().exists():
         return False
 
     auth_manager = SpotifyOAuth(
@@ -100,7 +115,7 @@ def is_authenticated() -> bool:
         client_secret=client_secret,
         redirect_uri=redirect_uri,
         scope=" ".join(SCOPES),
-        cache_path=str(cache_path),
+        cache_handler=_get_cache_handler(),
         open_browser=False,
     )
 

@@ -1,0 +1,14 @@
+# Secrets and tokens must never enter the image — they arrive via Cloud Run env/Secret Manager
+.env
+.env.*
+.spotify_cache/
+
+# Local-only
+.venv/
+.git/
+.github/
+.claude-memory/
+__pycache__/
+*.pyc
+exports/
+logo.png
