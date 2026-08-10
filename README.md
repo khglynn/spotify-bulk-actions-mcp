@@ -199,6 +199,31 @@ Restart Claude Code after adding this.
 | `parse_song_list_csv` | Validate a song CSV |
 | `export_review_csv` | Export uncertain matches for review |
 
+## How This Differs From the Official Spotify Connector
+
+Claude has an official Spotify connector (built by Spotify, April 2026). It's excellent
+at what it does — but its tool surface is small, and this MCP exists for everything it
+doesn't cover. As of August 2026 the official connector exposes 8 tools: Search Spotify,
+Create Playlist, Get Currently Playing, Add to Library, Remove from Library, Fetch
+Playlist Tracks, and two auth utilities.
+
+| Capability | Official connector | This MCP |
+|---|---|---|
+| Search, playback context, mood playlists | ✅ | Search only |
+| Create a playlist | ✅ | ✅ (plus CSV import w/ confidence scoring) |
+| Add/remove Liked Songs | ✅ (one at a time) | ✅ bulk |
+| Read your full library (saved tracks, followed artists) | ❌ | ✅ |
+| Listening insights (top artists/tracks, recently played) | ❌ | ✅ |
+| Edit existing playlists (bulk remove, reorder, update details) | ❌ | ✅ |
+| Dedupe / compare / export playlists to CSV | ❌ | ✅ |
+| Bulk follow/unfollow artists | ❌ | ✅ |
+
+One more difference: the official connector runs on Spotify's partner-gated MCP gateway
+(no dynamic client registration; tokens from ordinary developer apps are rejected), so
+it's only usable inside partnered AI surfaces. This MCP runs under your own Spotify
+developer app — Development Mode limits apply (5 allowlisted users per Client ID as of
+February 2026), but you control it end to end.
+
 ## Example Workflows
 
 ### Get Your Library Stats
