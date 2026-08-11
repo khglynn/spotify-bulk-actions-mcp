@@ -114,6 +114,40 @@ async def health(request: Request) -> JSONResponse:
     return JSONResponse({"status": "ok", "server": "spotify-bulk-actions-mcp"})
 
 
+# Favicon experiment (2026-08-10): claude.ai resolves custom-connector icons by
+# host, falling back to the parent domain's icon when the host serves none.
+# Serving one here tests whether the exact host wins over the parent fallback —
+# if yes, every MCP on a custom subdomain can carry its own icon.
+_ICON_PATH = Path(__file__).parent / "icon.png"
+
+
+@mcp.custom_route("/favicon.ico", methods=["GET"])
+async def favicon_ico(request: Request):
+    from starlette.responses import Response
+
+    return Response(_ICON_PATH.read_bytes(), media_type="image/png",
+                    headers={"Cache-Control": "public, max-age=3600"})
+
+
+@mcp.custom_route("/favicon.png", methods=["GET"])
+async def favicon_png(request: Request):
+    from starlette.responses import Response
+
+    return Response(_ICON_PATH.read_bytes(), media_type="image/png",
+                    headers={"Cache-Control": "public, max-age=3600"})
+
+
+@mcp.custom_route("/", methods=["GET"])
+async def root(request: Request):
+    from starlette.responses import HTMLResponse
+
+    return HTMLResponse(
+        '<!doctype html><html><head><title>Spotify Bulk Actions MCP</title>'
+        '<link rel="icon" type="image/png" href="/favicon.png">'
+        '</head><body><p>Spotify Bulk Actions MCP — connect via your MCP client at /mcp.</p></body></html>'
+    )
+
+
 # =============================================================================
 # Authentication & User Info
 # =============================================================================
