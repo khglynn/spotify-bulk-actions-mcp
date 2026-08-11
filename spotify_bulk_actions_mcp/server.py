@@ -119,7 +119,7 @@ async def health(request: Request) -> JSONResponse:
 # =============================================================================
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def check_auth_status() -> dict:
     """
     Check if Spotify authentication is set up and working.
@@ -163,7 +163,7 @@ def check_auth_status() -> dict:
 # =============================================================================
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_top_artists(
     time_range: str = "medium_term",
     limit: int = 50,
@@ -186,7 +186,7 @@ def get_top_artists(
     return library.get_top_artists(time_range=time_range, limit=limit)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_top_tracks(
     time_range: str = "medium_term",
     limit: int = 50,
@@ -207,7 +207,7 @@ def get_top_tracks(
     return library.get_top_tracks(time_range=time_range, limit=limit)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_recently_played(limit: int = 50) -> dict:
     """
     Get your recently played tracks.
@@ -221,7 +221,7 @@ def get_recently_played(limit: int = 50) -> dict:
     return library.get_recently_played(limit=limit)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_followed_artists(use_cache: bool = True) -> dict:
     """
     Get all artists you follow on Spotify.
@@ -235,7 +235,7 @@ def get_followed_artists(use_cache: bool = True) -> dict:
     return library.get_followed_artists(use_cache=use_cache)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_saved_tracks(use_cache: bool = True) -> dict:
     """
     Get all your liked/saved songs on Spotify.
@@ -251,7 +251,7 @@ def get_saved_tracks(use_cache: bool = True) -> dict:
     return library.get_saved_tracks(use_cache=use_cache)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_library_artists(use_cache: bool = True) -> dict:
     """
     Get unique artists from your saved songs, sorted by song count.
@@ -268,7 +268,7 @@ def get_library_artists(use_cache: bool = True) -> dict:
     return library.get_library_artists(use_cache=use_cache)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_albums_by_song_count(min_songs: int = 6, use_cache: bool = True) -> dict:
     """
     Find albums where you have N or more saved songs.
@@ -285,7 +285,7 @@ def get_albums_by_song_count(min_songs: int = 6, use_cache: bool = True) -> dict
     return library.get_albums_by_song_count(min_songs=min_songs, use_cache=use_cache)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def export_library_summary(use_cache: bool = True) -> dict:
     """
     Export a complete summary of your Spotify library.
@@ -309,7 +309,7 @@ def export_library_summary(use_cache: bool = True) -> dict:
 # =============================================================================
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def follow_artists(artist_ids: list) -> dict:
     """
     Follow artists on Spotify.
@@ -326,7 +326,7 @@ def follow_artists(artist_ids: list) -> dict:
     return library.follow_artists(artist_ids=artist_ids)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": True})
 def unfollow_artists(artist_ids: list, confirm: bool = False) -> dict:
     """
     Unfollow artists on Spotify.
@@ -343,7 +343,7 @@ def unfollow_artists(artist_ids: list, confirm: bool = False) -> dict:
     return library.unfollow_artists(artist_ids=artist_ids, confirm=confirm)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def save_tracks(track_ids: list) -> dict:
     """
     Save tracks to your Spotify library (like/heart them).
@@ -360,7 +360,7 @@ def save_tracks(track_ids: list) -> dict:
     return library.save_tracks(track_ids=track_ids)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": True})
 def unsave_tracks(track_ids: list, confirm: bool = False) -> dict:
     """
     Remove tracks from your Spotify library.
@@ -382,7 +382,7 @@ def unsave_tracks(track_ids: list, confirm: bool = False) -> dict:
 # =============================================================================
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def search_track(title: str, artist: str, limit: int = 5) -> dict:
     """
     Search for a single track and get matches with confidence scores.
@@ -398,7 +398,7 @@ def search_track(title: str, artist: str, limit: int = 5) -> dict:
     return search.search_track(title=title, artist=artist, limit=limit)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def search_track_fuzzy(title: str, artist: str, limit: int = 10) -> dict:
     """
     Broader fuzzy search when exact match fails.
@@ -419,7 +419,7 @@ def search_track_fuzzy(title: str, artist: str, limit: int = 10) -> dict:
     return search.search_track_fuzzy(title=title, artist=artist, limit=limit)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def batch_search_tracks(songs: list, delay_seconds: float = 0.2) -> dict:
     """
     Search for multiple tracks with confidence scoring.
@@ -446,7 +446,7 @@ def batch_search_tracks(songs: list, delay_seconds: float = 0.2) -> dict:
     return search.batch_search_tracks(songs=songs, delay_seconds=delay_seconds)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_track_preview_url(track_uri: str) -> dict:
     """
     Get the 30-second preview URL for a track.
@@ -465,7 +465,7 @@ def get_track_preview_url(track_uri: str) -> dict:
 # =============================================================================
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def create_playlist(name: str, description: str = "", public: bool = False) -> dict:
     """
     Create a new Spotify playlist.
@@ -481,7 +481,7 @@ def create_playlist(name: str, description: str = "", public: bool = False) -> d
     return playlist.create_playlist(name=name, description=description, public=public)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def add_tracks_to_playlist(playlist_id: str, track_uris: list) -> dict:
     """
     Add tracks to an existing playlist.
@@ -498,7 +498,7 @@ def add_tracks_to_playlist(playlist_id: str, track_uris: list) -> dict:
     return playlist.add_tracks_to_playlist(playlist_id=playlist_id, track_uris=track_uris)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def create_playlist_from_search_results(
     name: str,
     batch_results: dict,
@@ -531,7 +531,7 @@ def create_playlist_from_search_results(
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def import_and_create_playlist(
     name: str,
     csv_content: str,
@@ -568,7 +568,7 @@ def import_and_create_playlist(
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def add_reviewed_tracks(playlist_id: str, reviewed_csv: str) -> dict:
     """
     Add tracks from a reviewed CSV to an existing playlist.
@@ -590,7 +590,7 @@ def add_reviewed_tracks(playlist_id: str, reviewed_csv: str) -> dict:
     return playlist.add_reviewed_tracks(playlist_id=playlist_id, reviewed_csv=reviewed_csv)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_playlist_info(playlist_id: str) -> dict:
     """
     Get information about a playlist.
@@ -604,7 +604,7 @@ def get_playlist_info(playlist_id: str) -> dict:
     return playlist.get_playlist_info(playlist_id=playlist_id)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def update_playlist(
     playlist_id: str,
     name: str = None,
@@ -633,7 +633,7 @@ def update_playlist(
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def get_playlist_tracks(playlist_id: str) -> dict:
     """
     Get all tracks from a playlist.
@@ -647,7 +647,7 @@ def get_playlist_tracks(playlist_id: str) -> dict:
     return playlist.get_playlist_tracks(playlist_id=playlist_id)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def export_playlist_to_csv(playlist_id: str) -> dict:
     """
     Export a playlist to CSV format.
@@ -663,7 +663,7 @@ def export_playlist_to_csv(playlist_id: str) -> dict:
     return playlist.export_playlist_to_csv(playlist_id=playlist_id)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def compare_playlists(playlist_id_1: str, playlist_id_2: str) -> dict:
     """
     Compare two playlists to find shared and unique tracks.
@@ -681,7 +681,7 @@ def compare_playlists(playlist_id_1: str, playlist_id_2: str) -> dict:
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def find_duplicate_tracks(playlist_id: str) -> dict:
     """
     Find duplicate tracks in a playlist.
@@ -695,7 +695,7 @@ def find_duplicate_tracks(playlist_id: str) -> dict:
     return playlist.find_duplicate_tracks(playlist_id=playlist_id)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": True})
 def remove_duplicate_tracks(playlist_id: str, confirm: bool = False) -> dict:
     """
     Remove duplicate tracks from a playlist, keeping the first occurrence.
@@ -712,7 +712,7 @@ def remove_duplicate_tracks(playlist_id: str, confirm: bool = False) -> dict:
     return playlist.remove_duplicate_tracks(playlist_id=playlist_id, confirm=confirm)
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": True})
 def remove_tracks_from_playlist(
     playlist_id: str,
     track_uris: list,
@@ -738,7 +738,7 @@ def remove_tracks_from_playlist(
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def reorder_playlist_tracks(
     playlist_id: str,
     range_start: int,
@@ -770,7 +770,7 @@ def reorder_playlist_tracks(
 # =============================================================================
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def parse_song_list_csv(csv_content: str) -> dict:
     """
     Parse a CSV of songs into a structured list.
@@ -795,7 +795,7 @@ def parse_song_list_csv(csv_content: str) -> dict:
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": True})
 def export_review_csv(batch_results: dict) -> dict:
     """
     Export medium/low confidence matches to a CSV for human review.

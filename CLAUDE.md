@@ -33,6 +33,11 @@ Python MCP server for bulk Spotify operations - batch playlist creation, library
   app but are slated for removal — don't reintroduce them.
 - Development Mode limits (2026): max 5 allowlisted users per Client ID, owner
   must hold Premium, search `limit` capped at 10.
+- All 33 tools carry `readOnlyHint`/`destructiveHint` annotations (20 read-only /
+  9 additive / 4 destructive) — keep new tools annotated.
+- Known cleanup candidate (hosted mode): `export_*` / CSV tools write to the
+  container-local `exports/` dir, which is ephemeral and unreachable on Cloud Run.
+  They should return CSV content inline when `MCP_TRANSPORT=http`. Not yet done.
 
 ## Links
 

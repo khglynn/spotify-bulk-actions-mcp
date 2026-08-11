@@ -120,6 +120,15 @@ source venv/bin/activate
 python -c "from spotify_bulk_actions_mcp.utils.auth import is_authenticated; print('Auth OK!' if is_authenticated() else 'Not authenticated')"
 ```
 
+### Option B: Hosted (claude.ai custom connector)
+
+This server also runs as a remote MCP over streamable HTTP (`MCP_TRANSPORT=http`),
+fronted by OAuth 2.1 (WorkOS AuthKit) with a fail-closed user allowlist. That's how
+the author runs it: Cloud Run + Secret Manager for the Spotify refresh token, added
+to claude.ai as a custom connector. Tools carry `readOnlyHint`/`destructiveHint`
+annotations so clients can group read vs write actions. See `Dockerfile` and the
+deploy notes in the parent collection repo.
+
 ### 5. Connect to Claude Code
 
 Add this to your Claude Code settings (`~/.claude/settings.local.json`):
