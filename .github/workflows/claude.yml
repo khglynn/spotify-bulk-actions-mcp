@@ -20,17 +20,23 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Fetch shared instructions
+        # The canonical CLAUDE.md sources live in khglynn/helper/claude-configs/ (the
+        # repo was renamed from HG-Skills-Private; the old single file CLAUDE-DEVKEV.md
+        # became global-personal.md + workspace.md). The old path 404'd and, with no
+        # --fail, the error JSON got prepended onto CLAUDE.md as "instructions".
+        # `--fail` makes a bad path or an expired HELPER_REPO_PAT fail the step out loud.
+        # The combined text is written back to CLAUDE.md on purpose: when CLAUDE.md is
+        # just an "@AGENTS.md" import, the import still resolves in this checkout.
         env:
           GH_TOKEN: ${{ secrets.HELPER_REPO_PAT }}
         run: |
-          # Fetch main CLAUDE.md from HG-Skills-Private repo
-          curl -H "Authorization: token $GH_TOKEN" \
-            -H "Accept: application/vnd.github.v3.raw" \
-            "https://api.github.com/repos/khglynn/HG-Skills-Private/contents/helper/CLAUDE-DEVKEV.md" \
-            > /tmp/main-claude.md
-
-          # Combine: main instructions first, then project-specific
-          cat /tmp/main-claude.md CLAUDE.md > /tmp/combined.md
+          fetch() {
+            curl --fail --silent --show-error \
+              -H "Authorization: token $GH_TOKEN" \
+              -H "Accept: application/vnd.github.v3.raw" \
+              "https://api.github.com/repos/khglynn/helper/contents/claude-configs/$1"
+          }
+          { fetch global-personal.md; echo; fetch workspace.md; echo; cat CLAUDE.md; } > /tmp/combined.md
           mv /tmp/combined.md CLAUDE.md
 
       - uses: anthropics/claude-code-action@v1
