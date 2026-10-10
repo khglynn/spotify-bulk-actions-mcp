@@ -57,3 +57,8 @@ include = [
     "/README.md",
     "/LICENSE",
 ]
+
+[tool.uv]
+# Release-age gate (door fixes, 2026-10-09): resolve only package versions at least
+# 7 days old, so a freshly hijacked release can't land in uv.lock before it's caught.
+exclude-newer = "7 days"
