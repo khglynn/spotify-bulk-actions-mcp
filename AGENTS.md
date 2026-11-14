@@ -31,10 +31,11 @@ Python MCP server for bulk Spotify operations - batch playlist creation, library
   `POST /me/playlists` (`current_user_playlist_create`), playlist reads use
   `playlist_items`. Old per-user endpoints still respond for this grandfathered
   app but are slated for removal — don't reintroduce them.
-- Development Mode limits (2026): max 5 allowlisted users per Client ID, owner
-  must hold Premium, search `limit` capped at 10 (Spotify's
-  [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide);
-  the cap of 10 is from third-party trackers, checked 2026-11-13).
+- Development Mode limits (2026): max 5 allowlisted users per Client ID for new
+  apps (existing ones keep what they had), owner must hold Premium, search
+  `limit` capped at 10 (Spotify's
+  [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide),
+  checked 2026-11-13).
 - All 33 tools carry `readOnlyHint`/`destructiveHint` annotations (20 read-only /
   9 additive / 4 destructive) — keep new tools annotated.
 - The `export_*` and CSV tools return their content inline and write no files, so
