@@ -1,6 +1,6 @@
 # Spotify Bulk Actions MCP
 
-*Created: 2025-12-12*
+*Created: 2025-12-12* · **Last verified:** 2026-11-13
 
 ## What This Is
 
@@ -32,12 +32,21 @@ Python MCP server for bulk Spotify operations - batch playlist creation, library
   `playlist_items`. Old per-user endpoints still respond for this grandfathered
   app but are slated for removal — don't reintroduce them.
 - Development Mode limits (2026): max 5 allowlisted users per Client ID, owner
-  must hold Premium, search `limit` capped at 10.
+  must hold Premium, search `limit` capped at 10 (Spotify's
+  [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide);
+  the cap of 10 is from third-party trackers, checked 2026-11-13).
 - All 33 tools carry `readOnlyHint`/`destructiveHint` annotations (20 read-only /
   9 additive / 4 destructive) — keep new tools annotated.
-- Known cleanup candidate (hosted mode): `export_*` / CSV tools write to the
-  container-local `exports/` dir, which is ephemeral and unreachable on Cloud Run.
-  They should return CSV content inline when `MCP_TRANSPORT=http`. Not yet done.
+- The `export_*` and CSV tools return their content inline and write no files, so
+  they work the same hosted. The only disk writes are the `.spotify_cache/` folder.
+
+## Hosted mode
+
+`MCP_TRANSPORT=stdio` (the default) is the local Claude Code registration;
+`MCP_TRANSPORT=http` (set in the `Dockerfile`) serves the hosted claude.ai
+connector on Cloud Run. Deploys run only from the parent folder's
+`../deploy/deploy-spotify.sh`, which builds from a fresh clone of GitHub main,
+so merge first.
 
 ## Links
 
