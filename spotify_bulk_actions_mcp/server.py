@@ -433,6 +433,52 @@ def search_track(title: str, artist: str, limit: int = 5) -> dict:
 
 
 @mcp.tool(annotations={"readOnlyHint": True})
+def search_albums(album: str, artist: str = "", limit: int = 5) -> dict:
+    """
+    Find an album by its name, and its artist when known.
+
+    Args:
+        album: Album name
+        artist: Artist name (optional, narrows the search)
+        limit: Max results (default 5, at most 20)
+
+    Returns:
+        Matches ranked by confidence, each with its id, URI, release date and track count.
+        Pass the id to get_album_tracks to list its songs.
+    """
+    return search.search_albums(album=album, artist=artist, limit=limit)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
+def get_album_tracks(album_id: str) -> dict:
+    """
+    List every track on an album, in album order.
+
+    Args:
+        album_id: Album ID (from search_albums)
+
+    Returns:
+        The tracks with their URIs, and track_uris ready for add_tracks_to_playlist.
+    """
+    return search.get_album_tracks(album_id=album_id)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
+def find_playlists(name: str, limit: int = 5) -> dict:
+    """
+    Find a playlist by its name: your own and followed playlists first, then Spotify's search.
+
+    Args:
+        name: Playlist name, or words from it
+        limit: Max results from each place (default 5, at most 20)
+
+    Returns:
+        Matches with id, owner, track count and whether it's yours. Pass the id to get_playlist_tracks.
+    """
+    return search.find_playlists(name=name, limit=limit)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
 def search_track_fuzzy(title: str, artist: str, limit: int = 10) -> dict:
     """
     Broader fuzzy search when exact match fails.
