@@ -179,6 +179,9 @@ Restart Claude Code after adding this.
 | `search_track_fuzzy` | Broader search when exact fails |
 | `batch_search_tracks` | Search many tracks with confidence scores |
 | `get_track_preview_url` | Get 30-second preview URL |
+| `search_albums` | Find an album by name (and artist), with confidence scores |
+| `get_album_tracks` | Every track on an album, in order, ready to add to a playlist |
+| `find_playlists` | Find a playlist by name: yours and followed first, then Spotify's search |
 
 ### Playlist Creation
 | Tool | Description |
