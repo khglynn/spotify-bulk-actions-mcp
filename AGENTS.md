@@ -39,6 +39,10 @@ Python MCP server for bulk Spotify operations - batch playlist creation, library
   container-local `exports/` dir, which is ephemeral and unreachable on Cloud Run.
   They should return CSV content inline when `MCP_TRANSPORT=http`. Not yet done.
 
+## Tests
+
+`uv run python -m unittest discover -s tests` (stdlib only, against a stand-in Spotify client; no account needed).
+
 ## Links
 
 - **Repo**: https://github.com/khglynn/spotify-bulk-actions-mcp
