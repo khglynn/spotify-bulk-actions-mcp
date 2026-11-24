@@ -483,10 +483,12 @@ def find_playlists(name: str, limit: int = 5) -> Dict[str, Any]:
         if not page.get("items") or offset >= page.get("total", 0) or offset >= 1000:
             break
         time.sleep(0.1)
+    library = {p["id"] for p in own}   # every playlist read from his library, before the match filter and limit
     own = ranked([p for p in own if p["confidence"] >= 0.8])[:limit]
     result = spotify_client._handle_rate_limit(spotify_client.client.search, q=name, type="playlist",
                                                limit=min(limit, SEARCH_MAX))
-    found = [shaped(p, False) for p in (result.get("playlists") or {}).get("items") or [] if p]
+    # A search hit that's in his library but didn't make the list above still says so.
+    found = [shaped(p, p.get("id") in library) for p in (result.get("playlists") or {}).get("items") or [] if p]
     seen = {p["id"] for p in own}
     found = ranked([p for p in found if p["id"] not in seen])
     matches = own + found

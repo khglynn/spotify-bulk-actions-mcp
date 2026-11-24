@@ -67,6 +67,14 @@ class Lookups(unittest.TestCase):
         self.assertEqual((by_id["p1"]["yours"], by_id["p1"]["in_library"]), (True, True))
         self.assertEqual((by_id["p2"]["yours"], by_id["p2"]["in_library"]), (False, True))
 
+    def test_a_library_playlist_found_only_by_search_stays_in_the_library(self):
+        # Codex, round 2: one below the 0.8 match (or past the limit) came back from search as not in his library
+        followed = playlist("f", "Deep Focus", owner="spotify")
+        self.use(FakeSpotipy(own=[followed], found=[followed, playlist("x", "Focus Flow", owner="someone")]))
+        by_id = {p["id"]: p for p in search.find_playlists("Focus Music")["all_matches"]}
+        self.assertEqual((by_id["f"]["in_library"], by_id["f"]["yours"]), (True, False))
+        self.assertEqual(by_id["x"]["in_library"], False)
+
     def test_a_short_name_inside_the_asked_one_does_not_outrank_it(self):
         self.use(FakeSpotipy(own=[playlist("short", "Mix"), playlist("exact", "Morning Mix")]))
         out = search.find_playlists("Morning Mix")
