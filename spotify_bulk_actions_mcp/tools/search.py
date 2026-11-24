@@ -396,10 +396,12 @@ def get_track_preview_url(track_uri: str) -> Dict[str, Any]:
 # to rebuild an album song by song from memory. These look up an album or a playlist by its name and list what's
 # on it, so it can be copied into a playlist whole and in order.
 
+SEARCH_MAX = 10   # Spotify's search refuses a larger `limit` for this app (Development Mode, AGENTS.md)
+
 
 def search_albums(album: str, artist: str = "", limit: int = 5) -> Dict[str, Any]:
     """Albums matching a name (and an artist, when given), best match first, each with a confidence score."""
-    limit = max(1, min(int(limit), 20))
+    limit = max(1, min(int(limit), SEARCH_MAX))
     query = f'album:"{album}"' + (f' artist:"{artist}"' if artist else "")
     result = spotify_client._handle_rate_limit(spotify_client.client.search, q=query, type="album", limit=limit)
     matches = []
@@ -447,14 +449,30 @@ def get_album_tracks(album_id: str) -> Dict[str, Any]:
 
 
 def find_playlists(name: str, limit: int = 5) -> Dict[str, Any]:
-    """Playlists matching a name: the user's own and followed playlists first, then Spotify's search."""
-    limit = max(1, min(int(limit), 20))
-    needle = name.lower()
+    """Playlists matching a name: the user's own and followed playlists first, then Spotify's search.
 
-    def shaped(p, mine):
-        return {"name": p["name"], "id": p["id"], "uri": p["uri"], "owner": (p.get("owner") or {}).get("display_name"),
-                "tracks": (p.get("tracks") or {}).get("total"), "yours": mine,
-                "confidence": round(fuzz.partial_ratio(needle, p["name"].lower()) / 100, 3)}
+    `yours` is true only for a playlist the user owns (one they can change); `in_library` also covers the ones they
+    follow. Matches rank by partial_ratio, ties broken by plain ratio, so a short name ("Mix") that sits inside the
+    one asked for ("Morning Mix") doesn't outrank it."""
+    limit = max(1, min(int(limit), 20))   # the user's own list is filtered here, so it may return up to 20
+    needle = name.lower()
+    me = (spotify_client.get_current_user() or {}).get("id")
+
+    def shaped(p, in_library):
+        owner = p.get("owner") or {}
+        # Spotify's 2026 Web API names the playlist's track summary `items` where it was `tracks`; read either.
+        summary = p.get("tracks") if isinstance(p.get("tracks"), dict) else p.get("items")
+        return {"name": p["name"], "id": p["id"], "uri": p["uri"], "owner": owner.get("display_name"),
+                "tracks": summary.get("total") if isinstance(summary, dict) else None,
+                "yours": bool(me) and owner.get("id") == me, "in_library": in_library,
+                "confidence": round(fuzz.partial_ratio(needle, p["name"].lower()) / 100, 3),
+                "_tie": fuzz.ratio(needle, p["name"].lower())}
+
+    def ranked(ps):
+        out = sorted(ps, key=lambda p: (p["confidence"], p["_tie"]), reverse=True)
+        for p in out:
+            p.pop("_tie", None)
+        return out
 
     own, offset = [], 0
     while True:
@@ -465,10 +483,11 @@ def find_playlists(name: str, limit: int = 5) -> Dict[str, Any]:
         if not page.get("items") or offset >= page.get("total", 0) or offset >= 1000:
             break
         time.sleep(0.1)
-    own = sorted((p for p in own if p["confidence"] >= 0.8), key=lambda p: p["confidence"], reverse=True)[:limit]
-    result = spotify_client._handle_rate_limit(spotify_client.client.search, q=name, type="playlist", limit=limit)
+    own = ranked([p for p in own if p["confidence"] >= 0.8])[:limit]
+    result = spotify_client._handle_rate_limit(spotify_client.client.search, q=name, type="playlist",
+                                               limit=min(limit, SEARCH_MAX))
     found = [shaped(p, False) for p in (result.get("playlists") or {}).get("items") or [] if p]
     seen = {p["id"] for p in own}
-    found = sorted((p for p in found if p["id"] not in seen), key=lambda p: p["confidence"], reverse=True)
+    found = ranked([p for p in found if p["id"] not in seen])
     matches = own + found
     return {"query": name, "best_match": matches[0] if matches else None, "all_matches": matches}

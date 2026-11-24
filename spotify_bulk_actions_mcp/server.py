@@ -440,7 +440,7 @@ def search_albums(album: str, artist: str = "", limit: int = 5) -> dict:
     Args:
         album: Album name
         artist: Artist name (optional, narrows the search)
-        limit: Max results (default 5, at most 20)
+        limit: Max results (default 5, at most 10, Spotify's search cap)
 
     Returns:
         Matches ranked by confidence, each with its id, URI, release date and track count.
@@ -470,10 +470,10 @@ def find_playlists(name: str, limit: int = 5) -> dict:
 
     Args:
         name: Playlist name, or words from it
-        limit: Max results from each place (default 5, at most 20)
+        limit: Max results from each place (default 5; at most 20 of your own, 10 from search)
 
     Returns:
-        Matches with id, owner, track count and whether it's yours. Pass the id to get_playlist_tracks.
+        Matches with id, owner, track count and whether it's yours (you own it) or only in your library. Pass the id to get_playlist_tracks.
     """
     return search.find_playlists(name=name, limit=limit)
 

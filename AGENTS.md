@@ -15,7 +15,7 @@ Python MCP server for bulk Spotify operations - batch playlist creation, library
 | Bulk operations | Handles 500+ songs with rate limiting |
 | Library exports | Complete library data extraction |
 
-## Tools (33)
+## Tools (36)
 
 - **Library Analysis**: `check_auth_status`, `get_followed_artists`, `get_saved_tracks`, `get_library_artists`, `get_albums_by_song_count`, `export_library_summary`
 - **Listening Insights**: `get_top_artists`, `get_top_tracks`, `get_recently_played`
@@ -33,7 +33,7 @@ Python MCP server for bulk Spotify operations - batch playlist creation, library
   app but are slated for removal — don't reintroduce them.
 - Development Mode limits (2026): max 5 allowlisted users per Client ID, owner
   must hold Premium, search `limit` capped at 10.
-- All 33 tools carry `readOnlyHint`/`destructiveHint` annotations (20 read-only /
+- All 36 tools carry `readOnlyHint`/`destructiveHint` annotations (23 read-only /
   9 additive / 4 destructive) — keep new tools annotated.
 - Known cleanup candidate (hosted mode): `export_*` / CSV tools write to the
   container-local `exports/` dir, which is ephemeral and unreachable on Cloud Run.

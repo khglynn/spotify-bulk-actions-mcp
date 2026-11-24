@@ -145,7 +145,7 @@ Add this to your Claude Code settings (`~/.claude/settings.local.json`):
 
 Restart Claude Code after adding this.
 
-## Available Tools (33)
+## Available Tools (36)
 
 ### Library Analysis
 | Tool | Description |
